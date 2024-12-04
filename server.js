@@ -27,7 +27,6 @@ app.listen(PORT, () => console.log(`Server up and running on http://localhost:${
 const userRoutes = require("./routes/user.route");
 app.use("/api/user", userRoutes);
 
-
 module.exports = app;
 
 // secert github
