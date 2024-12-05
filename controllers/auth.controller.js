@@ -1,7 +1,8 @@
 const User = require('../models/user.model');
 require('dotenv').config();
+const bcrypt = require("bcrypt");
 
-async function CreateUser(req, res){
+async function RegisterUser(req, res){
     try {
 
         // regex 1 minuscule / 1 majuscule / 1 chiffre / 1 charactere spécial
@@ -56,21 +57,12 @@ async function CreateUser(req, res){
         }
 
     } catch (error) {
+        console.log(error);
         return res.status(500).json({ error: "Une erreur est survenue" });
     }
 }
 
-async function GetAllUsers(req, res) {
-    try {
-        res.status(200).json({ success: "hello world" });
-    } catch (error) {
-        res.status(500).json({ error: 'Une erreur est survenue' });
-    }
-}
-
-
 
 module.exports = {
-    CreateUser,
-    GetAllUsers
+    RegisterUser
 };
