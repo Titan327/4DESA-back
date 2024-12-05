@@ -22,17 +22,36 @@ const PORT = process.env.PORT;
 
 app.listen(PORT, () => console.log(`Server up and running on http://localhost:${PORT}`))
 
-require('./configurations/db.config');
+const sequelize = require('./configurations/db.config');
+
+const User = require('./models/user.model');
+const Content = require('./models/content.model');
+const Comment = require('./models/comment.model');
+
+User.hasMany(Content, { foreignKey: 'userId' });
+Content.belongsTo(User, { foreignKey: 'userId' });
+
+Content.hasMany(Comment, { foreignKey: 'contentId' });
+Comment.belongsTo(Content, { foreignKey: 'contentId' });
+
+sequelize.sync().then(() => {
+    console.log('tables created successfully!');
+}).catch((error) => {
+    console.error('Unable to create tables : ', error);
+});
+
 
 const authRoutes = require("./routes/auth.route");
 app.use("/api/auth", authRoutes);
 
-const contentRoutes = require("./routes/content.route");
-app.use("/api/content", contentRoutes);
-
 const userRoutes = require("./routes/user.route");
 app.use("/api/user", userRoutes);
 
+const contentRoutes = require("./routes/content.route");
+app.use("/api/content", contentRoutes);
+
+const commentRoutes = require("./routes/comment.route");
+app.use("/api/comment", commentRoutes);
 
 
 module.exports = app;

@@ -1,16 +1,17 @@
 const Comment = require('../models/comment.model');
 const {where} = require("sequelize");
 const User = require("../models/user.model");
+const Content = require("../models/content.model");
 require('dotenv').config();
 
 async function postComment(req, res){
     try {
-        const userId = req.user.id;
-        const { text, contentId } = req.body;
+
+        const { contentId } = req.query;
+        const { text } = req.body;
 
         await Comment.create({
             text: text,
-            userId: userId,
             contentId: contentId
         }).then((result) => {
             return res.status(200).json({ success: result });
@@ -26,18 +27,29 @@ async function postComment(req, res){
 async function getCommentsOfContent(req, res){
     try {
 
-        const { contentId,page } = req.body;
+        const { contentId,page } = req.query;
 
-        const user = await User.findOne({
-            where: { id: userId },
-            attributes: ["public"],
+
+        const content = await Content.findOne({
+            include: [
+                {
+                    model: User,
+                    attributes: ["public","active"]
+                }
+            ],
+            where: { id: contentId }
         });
 
-        if (!user) {
-            return res.status(404).json({ error: "Utilisateur introuvable." });
+
+        if (!content) {
+            return res.status(404).json({ error: "Post introuvable." });
         }
 
-        if (user.public == 1 || userId === req.user.id) {
+        if (!content.User.active) {
+            return res.status(404).json({ error: "Utilisateur introuvable" });
+        }
+
+        if (content.User.public == 1 || content.userId === req.user.id) {
 
             await Comment.findAll({
                 where: {contentId: contentId},
@@ -54,11 +66,11 @@ async function getCommentsOfContent(req, res){
         }
 
     } catch (error) {
+        console.log(error);
         return res.status(500).json({ error: "Une erreur est survenue" });
     }
 
 }
-
 
 module.exports = {
     postComment,

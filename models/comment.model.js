@@ -8,10 +8,6 @@ const Comment = sequelize.define("Comment", {
         primaryKey: true,
         autoIncrement: true,
     },
-    userId : {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
     contentId: {
         type: DataTypes.INTEGER,
         allowNull: false
@@ -22,10 +18,5 @@ const Comment = sequelize.define("Comment", {
     },
 });
 
-sequelize.sync().then(() => {
-    console.log('Comment table created successfully!');
-}).catch((error) => {
-    console.error('Unable to create table Comment : ', error);
-});
 
 module.exports = Comment;

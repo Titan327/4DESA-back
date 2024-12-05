@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../configurations/db.config');
 const Comment = require('../models/comment.model');
+const User = require('../models/user.model');
 
 const Content = sequelize.define("Content", {
     id : {
@@ -23,13 +24,5 @@ const Content = sequelize.define("Content", {
     },
 });
 
-Content.hasMany(Comment, { foreignKey: 'contentId' });
-Comment.belongsTo(Content, { foreignKey: 'contentId' });
-
-sequelize.sync().then(() => {
-    console.log('Content table created successfully!');
-}).catch((error) => {
-    console.error('Unable to create table Content : ', error);
-});
 
 module.exports = Content;

@@ -5,7 +5,7 @@ const authenticateToken = require('../middlewares/jwt_auth.middleware');
 
 
 //PUBLIC
-//POST /api/content
+//POST /api/comment?contentId=1
 router.post("/",authenticateToken,CommentController.postComment);
 //GET /api/content
 router.get("/",authenticateToken,CommentController.getCommentsOfContent);
