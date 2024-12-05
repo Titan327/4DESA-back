@@ -9,8 +9,8 @@ router.post("/register",AuthController.RegisterUser);
 //POST /api/auth/login
 router.post("/login",AuthController.LoginUser);
 
-router.get("/auth/azure", AuthController.AzureAuth);
-router.get("/auth/azure/callback", AuthController.AzureCallback);
-router.get("/auth/failure", AuthController.AuthFailure);
+router.get("/azure", AuthController.AzureAuth);
+router.get("/azure/callback", AuthController.AzureCallback);
+router.get("/failure", AuthController.AuthFailure);
 
 module.exports = router;

@@ -1,6 +1,7 @@
 const Content = require('../models/content.model');
 const {where} = require("sequelize");
 const User = require("../models/user.model");
+const Follow = require("../models/follow.model");
 require('dotenv').config();
 
 async function postContent(req, res){
@@ -33,8 +34,16 @@ async function getContentOfUser(req, res){
             attributes: ["public"],
         });
 
+        const follow = await Follow.findOne({
+            where: { userId: userId, userFollowedId: req.user.id, followAccepter: true },
+        })
+
         if (!user) {
             return res.status(404).json({ error: "Utilisateur introuvable." });
+        }
+
+        if (!follow){
+            return res.status(401).json({ message: "Cet utilisateur est en privé." });
         }
 
         if (user.public == 1 || userId == req.user.id) {
