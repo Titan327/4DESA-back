@@ -100,8 +100,39 @@ async function LoginUser(req,res) {
     }
 }
 
+function AzureAuth(req, res, next) {
+    passport.authenticate("azuread-openidconnect")(req, res, next);
+}
+
+function AzureCallback(req, res, next) {
+    passport.authenticate("azuread-openidconnect", { failureRedirect: "/auth/failure" }, (err, user) => {
+        if (err || !user) {
+            return res.status(401).json({ error: "Authentication failed." });
+        }
+
+        // Génération d'un JWT pour l'utilisateur connecté
+        const dataJWT = {
+            id: user.id,
+            name: user.name,
+            surname: user.surname,
+            username: user.username,
+        };
+
+        const token = jwt.sign(dataJWT, process.env.JWT_KEY);
+
+        res.status(200).json({ token });
+    })(req, res, next);
+}
+
+function AuthFailure(req, res) {
+    res.status(401).json({ error: "Authentification échouée." });
+}
+
 
 module.exports = {
+    AzureAuth,
+    AzureCallback,
+    AuthFailure,
     RegisterUser,
     LoginUser
 };
