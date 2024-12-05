@@ -7,6 +7,8 @@ const authenticateToken = require('../middlewares/jwt_auth.middleware');
 //PUBLIC
 //POST /api/content
 router.post("/",authenticateToken,ContentController.postContent);
+//GET /api/content
+router.get("/",authenticateToken,ContentController.getContentOfUser);
 
 
 
