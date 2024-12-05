@@ -1,7 +1,7 @@
 const User = require('../models/user.model');
 require('dotenv').config();
 
-async function CreateUser(req, res){
+async function createUser(req, res){
     try {
 
         // regex 1 minuscule / 1 majuscule / 1 chiffre / 1 charactere spécial
@@ -60,17 +60,45 @@ async function CreateUser(req, res){
     }
 }
 
-async function GetAllUsers(req, res) {
+async function findUserByUsername(req, res) {
     try {
-        res.status(200).json({ success: "hello world" });
+
+        const { username } = req.body;
+
+        await User.findOne({
+            where: {username: username},
+            attributes: ["id","username","public"]
+        }).then((result) => {
+            return res.status(200).json({ success: result });
+        }).catch(() => {
+            return res.status(500).json({ error: "Une erreur interne au serveur est surenue, veuiller contacter les administrateurs" });
+        });
+
     } catch (error) {
-        res.status(500).json({ error: 'Une erreur est survenue' });
+        return res.status(500).json({ error: "Une erreur est survenue" });
     }
 }
 
+async function setPublicParam(req, res){
+    try {
+        const userId = req.user.id;
+        const { public } = req.body;
 
+        await User.update(
+            { public: public },
+            { where: {id : userId} }
+        ).then(() => {
+            return res.status(200).json({ success: "Utilisateur modifié" });
+        }).catch((error) => {
+            return res.status(500).json({ error: "Une erreur interne au serveur est surenue, veuiller contacter les administrateurs" });
+        });
+    } catch (error) {
+        return res.status(500).json({ error: "Une erreur est survenue" });
+    }
+}
 
 module.exports = {
-    CreateUser,
-    GetAllUsers
+    createUser,
+    findUserByUsername,
+    setPublicParam
 };

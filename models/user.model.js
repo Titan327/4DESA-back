@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../configurations/db.config');
+const Content = require('./content.model');
 
 const User = sequelize.define("User", {
     id : {
@@ -10,6 +11,11 @@ const User = sequelize.define("User", {
     username: {
         type: DataTypes.STRING(20),
         allowNull: false
+    },
+    public: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
     },
     name: {
         type: DataTypes.STRING(20),
@@ -28,6 +34,9 @@ const User = sequelize.define("User", {
         allowNull: false
     },
 });
+
+User.hasMany(Content, { foreignKey: 'userId' });
+Content.belongsTo(User, { foreignKey: 'userId' });
 
 sequelize.sync().then(() => {
     console.log('User table created successfully!');

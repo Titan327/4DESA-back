@@ -24,11 +24,16 @@ app.listen(PORT, () => console.log(`Server up and running on http://localhost:${
 
 require('./configurations/db.config');
 
+const authRoutes = require("./routes/auth.route");
+app.use("/api/auth", authRoutes);
+
+const contentRoutes = require("./routes/content.route");
+app.use("/api/content", contentRoutes);
+
 const userRoutes = require("./routes/user.route");
 app.use("/api/user", userRoutes);
 
-const authRoutes = require("./routes/auth.route");
-app.use("/api/auth", authRoutes);
+
 
 module.exports = app;
 
