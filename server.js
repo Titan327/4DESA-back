@@ -61,6 +61,9 @@ app.use("/api/content", contentRoutes);
 const commentRoutes = require("./routes/comment.route");
 app.use("/api/comment", commentRoutes);
 
+const followRoutes = require("./routes/follow.route");
+app.use("/api/follow", followRoutes);
+
 module.exports = app;
 
 

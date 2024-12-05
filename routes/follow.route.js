@@ -7,10 +7,12 @@ const authenticateToken = require('../middlewares/jwt_auth.middleware');
 //PUBLIC
 //POST /api/follow?followerId
 router.post("/",authenticateToken,FollowController.follow);
-//GET /api/waitingfollower
+//GET /api/follow/waitingfollower
 router.get("/waitingfollower",authenticateToken,FollowController.getAllWaitingFollower);
-//PUT /api/waitingfollower?followId
+//PUT /api/follow?followId
 router.put("/accept",authenticateToken,FollowController.acceptFollower);
+//GET /api/follow
+router.get("/",authenticateToken,FollowController.getAllFollower);
 
 
 

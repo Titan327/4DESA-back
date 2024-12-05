@@ -23,10 +23,6 @@ jobs:
 
       - name: npm install, build, and test
         run: |
-          echo "DB_URL=${{ secrets.DB_URL }}" >> .env
-          echo "DB_PSWD=${{ secrets.DB_PSWD }}" >> .env
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
-          echo "DB_DIALECT=${{ secrets.DB_DIALECT }}" >> .env
           npm install
 
       - name: Zip artifact for deployment
