@@ -24,15 +24,23 @@ app.listen(PORT, () => console.log(`Server up and running on http://localhost:${
 
 const sequelize = require('./configurations/db.config');
 
+
 const User = require('./models/user.model');
 const Content = require('./models/content.model');
 const Comment = require('./models/comment.model');
+const Follow = require('./models/follow.model');
 
 User.hasMany(Content, { foreignKey: 'userId' });
 Content.belongsTo(User, { foreignKey: 'userId' });
 
 Content.hasMany(Comment, { foreignKey: 'contentId' });
 Comment.belongsTo(Content, { foreignKey: 'contentId' });
+
+User.hasMany(Follow, { foreignKey: 'userId' });
+Follow.belongsTo(User, { foreignKey: 'userId' });
+
+User.hasMany(Follow, { foreignKey: 'userFollowedId' });
+Follow.belongsTo(User, { foreignKey: 'userFollowedId' });
 
 sequelize.sync().then(() => {
     console.log('tables created successfully!');
@@ -53,8 +61,7 @@ app.use("/api/content", contentRoutes);
 const commentRoutes = require("./routes/comment.route");
 app.use("/api/comment", commentRoutes);
 
-
 module.exports = app;
 
-// secert github
+
 // mise en resau publique de la db a desactiver
