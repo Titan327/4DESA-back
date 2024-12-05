@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../configurations/db.config');
-const User = require('../models/user.model');
+const Comment = require('../models/comment.model');
 
 const Content = sequelize.define("Content", {
     id : {
@@ -22,6 +22,9 @@ const Content = sequelize.define("Content", {
         defaultValue: null,
     },
 });
+
+Content.hasMany(Comment, { foreignKey: 'contentId' });
+Comment.belongsTo(Content, { foreignKey: 'contentId' });
 
 sequelize.sync().then(() => {
     console.log('Content table created successfully!');
