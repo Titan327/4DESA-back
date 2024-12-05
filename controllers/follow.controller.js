@@ -63,6 +63,7 @@ async function getAllFollower(req, res){
     }
 }
 
+
 async function acceptFollower(req, res){
 
     const { followId } = req.query;
