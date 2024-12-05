@@ -6,6 +6,7 @@ const UserController = require('../controllers/auth.controller');
 //PUBLIC
 //POST http://localhost:9000/api/auth/register
 router.post("/register",UserController.RegisterUser);
-
+//POST http://localhost:9000/api/auth/login
+router.post("/login",UserController.LoginUser);
 
 module.exports = router;

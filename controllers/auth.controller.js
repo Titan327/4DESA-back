@@ -1,6 +1,7 @@
 const User = require('../models/user.model');
 require('dotenv').config();
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 async function RegisterUser(req, res){
     try {
@@ -15,6 +16,9 @@ async function RegisterUser(req, res){
         }
         if (data.surname.length > 20){
             return res.status(449).json({ error: "Le prenom est trop long." });
+        }
+        if (data.username.length > 20){
+            return res.status(449).json({ error: "L'username est trop long." });
         }
         if (data.email.length > 100){
             return res.status(449).json({ error: "L'email est trop long." });
@@ -44,6 +48,7 @@ async function RegisterUser(req, res){
             await User.create({
                 name: data.name,
                 surname: data.surname,
+                username: data.username,
                 email: data.email,
                 password: pswdHash,
             });
@@ -57,12 +62,46 @@ async function RegisterUser(req, res){
         }
 
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ error: "Une erreur est survenue" });
+    }
+}
+
+async function LoginUser(req,res) {
+    try {
+
+        const data = req.body;
+
+        const user = await User.findOne({
+            where:{
+                email: data.email,
+            }
+        });
+
+        if (await bcrypt.compare(data.password, user["password"])){
+
+            const dataJWT = {
+                id: user["id"],
+                name: user["name"],
+                surname: user["surname"],
+                username: user["username"],
+                role: user["role"],
+            }
+
+            const JWT = jwt.sign(dataJWT, process.env.JWT_KEY);
+
+            return res.status(200).json({ token: JWT });
+        }else {
+            return res.status(449).json({ error: "Mot de passe ou email erroné." });
+        }
+
+
+    } catch (error) {
+        return res.status(500).json({ error: 'Une erreur est survenue.' });
     }
 }
 
 
 module.exports = {
-    RegisterUser
+    RegisterUser,
+    LoginUser
 };

@@ -23,6 +23,11 @@ jobs:
 
       - name: npm install, build, and test
         run: |
+          echo "PORT=${{ secrets.PORT }}" >> .env
+          echo "DB_URL=${{ secrets.DB_URL }}" >> .env
+          echo "DB_PSWD=${{ secrets.DB_PSWD }}" >> .env
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+          echo "DB_DIALECT=${{ secrets.DB_DIALECT }}" >> .env
           npm install
 
       - name: Zip artifact for deployment
@@ -66,12 +71,3 @@ jobs:
           app-name: 'back-4desa'
           slot-name: 'Production'
           package: .
-
-      - name: Inject environment variables
-        run: |
-          echo "PORT=${{ secrets.PORT }}" >> .env
-          echo "DB_URL=${{ secrets.DB_URL }}" >> .env
-          echo "DB_PSWD=${{ secrets.DB_PSWD }}" >> .env
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
-          echo "DB_DIALECT=${{ secrets.DB_DIALECT }}" >> .env
-        shell: bash
