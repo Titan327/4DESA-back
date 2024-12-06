@@ -96,7 +96,7 @@ async function LoginUser(req,res) {
 
 
     } catch (error) {
-        return res.status(500).json({ error: 'Une erreur est survenue.' });
+        return res.status(500).json({ error: error });
     }
 }
 
