@@ -2,6 +2,7 @@ const User = require('../models/user.model');
 require('dotenv').config();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const passport = require("passport");
 
 async function RegisterUser(req, res){
     try {
